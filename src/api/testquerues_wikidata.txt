@@ -1,0 +1,71 @@
+https://query.wikidata.org/sparql
+
+parameters: 
+
+query: 
+
+SELECT
+  ?species
+  ?taxonName
+  ?speciesLabel
+  ?description
+  ?iucnLabel
+  ?wikipedia
+  (GROUP_CONCAT(DISTINCT ?commonName; separator=", ") AS ?commonNames)
+  (GROUP_CONCAT(DISTINCT ?image; separator=", ") AS ?images)
+  (GROUP_CONCAT(DISTINCT ?rangeMap; separator=", ") AS ?rangeMaps)
+  (GROUP_CONCAT(DISTINCT ?video; separator=", ") AS ?videos)
+  (GROUP_CONCAT(DISTINCT ?audio; separator=", ") AS ?audios)
+
+WHERE {
+  # Scientific name match
+  ?species wdt:P225 "Panthera leo".
+  ?species wdt:P225 ?taxonName.
+
+  # English description
+  OPTIONAL {
+    ?species schema:description ?description.
+    FILTER (lang(?description) = "en")
+  }
+
+  # IUCN conservation status
+  OPTIONAL { ?species wdt:P141 ?iucn. }
+
+  # English common names
+  OPTIONAL {
+    ?species wdt:P1843 ?commonName.
+    FILTER (lang(?commonName) = "en")
+  }
+
+  # Regular images
+  OPTIONAL { ?species wdt:P18 ?image. }
+
+  # Range map image
+  OPTIONAL { ?species wdt:P181 ?rangeMap. }
+
+  # Video files
+  OPTIONAL { ?species wdt:P10 ?video. }
+
+  # Audio files
+  OPTIONAL { ?species wdt:P51 ?audio. }
+
+  # English Wikipedia article
+  OPTIONAL {
+    ?wikipedia schema:about ?species ;
+               schema:isPartOf <https://en.wikipedia.org/> .
+  }
+
+  SERVICE wikibase:label {
+    bd:serviceParam wikibase:language "en".
+  }
+}
+GROUP BY
+  ?species
+  ?taxonName
+  ?speciesLabel
+  ?description
+  ?iucnLabel
+  ?wikipedia
+
+
+format: json
