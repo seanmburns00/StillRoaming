@@ -1,14 +1,15 @@
-import { state } from "./state.js"
-import { renderMapView } from "./views/mapView.js"
-import { renderBookView } from "./views/bookView.js"
+import { SpeciesExplorer } from "./views/SpeciesExplorer.js";
+import { SpeciesDetailView } from "./views/SpeciesDetailView.js";
 
-export function render() {
-  const app = document.getElementById("app")!
-  app.innerHTML = "" // clear previous view
+export const routes = {
+  home: "/",
+  detail: "/species/:taxonName",
+};
 
-  if (state.currentView === "map") {
-    renderMapView(app)
-  } else if (state.currentView === "book") {
-    renderBookView(app)
-  }
-}
+/**
+ * Simple helper to navigate and pass the taxonName 
+ * as a URL parameter to keep the state shareable.
+ */
+export const navigateToDetail = (taxonName: string) => {
+  window.location.hash = `#${taxonName}`;
+};

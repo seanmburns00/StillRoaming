@@ -1,11 +1,17 @@
 export interface Species {
+  // Essential fields
   taxonName: string                // Scientific name 
   label: string                    // Common name 
+  images: string[]                 // Images
+  rank: string                     // Taxonomic rank
+
+  // Filterable/Relational fields
+  parentIds: string[];
+
+  // Optional/Extended fields
   description?: string             // Short description
   iucnStatus?: string              // IUCN Status
   wikipedia?: string               // Wiki Url
-  commonNames: string[]            // Common Names (TODO remove)
-  images: string[]                 // Images
   rangeMaps: string[]              // Range maps
   videos: string[]                 // Videos 
   audios: string[]                 // Audio Files
