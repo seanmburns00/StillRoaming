@@ -19,6 +19,7 @@
   --dark-ink: #3b2f1e;
   --cr: #b3261e;
   --en: #d9822b;
+  --en-badge: #b25d12;
   --vu: #c9a227;
   --ui-font: "Trebuchet MS", Verdana, Tahoma, sans-serif;
   --body-font: Georgia, "Times New Roman", serif;
@@ -189,7 +190,7 @@ a:hover {
 }
 
 .status-badge--EN {
-  background: var(--en);
+  background: var(--en-badge);
 }
 
 .status-badge--VU {

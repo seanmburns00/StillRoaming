@@ -4,5 +4,6 @@ export default defineConfig({
   base: "/StillRoaming/",
   test: {
     environment: "node",
+    include: ["src/**/*.test.ts"],
   },
 });
