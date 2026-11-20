@@ -17,6 +17,7 @@ export type Route =
   | { view: "chapter"; order: string }
   | { view: "species"; speciesKey: number }
   | { view: "subspecies"; subspeciesKey: number }
+  | { view: "quiz" }
   | { view: "organizations" };
 
 export type ShareablePage = "species" | "subspecies";
@@ -39,6 +40,7 @@ export const routes = {
   chapter: (order: string) => `#/book/${encodeURIComponent(order)}`,
   species: (speciesKey: number) => `#/species/${speciesKey}`,
   subspecies: (subspeciesKey: number) => `#/subspecies/${subspeciesKey}`,
+  quiz: () => "#/quiz",
   organizations: () => "#/organizations",
   sharePage: (page: ShareablePage, gbifKey: number) => `${page}/${gbifKey}/`,
 };
@@ -48,6 +50,7 @@ export function parseRoute(hash: string): Route {
   const [section, value] = path.split("/");
 
   if (section === "map") return { view: "map", ...parseMapState(new URLSearchParams(search)) };
+  if (section === "quiz") return { view: "quiz" };
   if (section === "organizations") return { view: "organizations" };
   if (section === "book") {
     const order = value && safeDecode(value);

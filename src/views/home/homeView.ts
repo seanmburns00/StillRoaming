@@ -20,13 +20,14 @@ export function mountHomeView(outlet: HTMLElement): () => void {
       el(
         "p",
         { className: "lede" },
-        `${index.length.toLocaleString()} threatened mammal species have been photographed in the wild and shared on GBIF. See where they were seen this month or read up on each one.`,
+        `${index.length.toLocaleString()} threatened mammal species have been photographed in the wild and shared on GBIF. See where they were seen this month, read up on each one, or test yourself.`,
       ),
       el(
         "p",
         { className: "welcome__actions" },
         el("a", { href: routes.map(), className: "button" }, "Open the field map"),
         el("a", { href: routes.contents(), className: "button" }, "Browse the field guide"),
+        el("a", { href: routes.quiz(), className: "button" }, "Take the daily quiz"),
       ),
     );
     if (!species) return [welcome];

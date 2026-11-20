@@ -11,6 +11,7 @@ import { mountSubspeciesPage } from "./views/book/subspeciesPage";
 import { mountHomeView } from "./views/home/homeView";
 import { mountMapView } from "./views/map/mapView";
 import { mountOrganizationsView } from "./views/organizations/organizationsView";
+import { mountQuizView } from "./views/quiz/quizView";
 
 restoreTheme();
 const shell = renderShell(document.querySelector<HTMLElement>("#app")!);
@@ -22,6 +23,8 @@ function mount(route: Route): () => void {
       return mountHomeView(shell.outlet);
     case "map":
       return mountMapView(shell.outlet, route);
+    case "quiz":
+      return mountQuizView(shell.outlet);
     case "organizations":
       return mountOrganizationsView(shell.outlet);
     case "contents":

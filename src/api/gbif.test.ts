@@ -329,6 +329,13 @@ describe("fetchSightings", () => {
     expect(total).toBe(MAX_SIGHTINGS * 10);
   });
 
+  it("stops at a smaller limit when asked", async () => {
+    const fetchMock = stubGbif(PAGE_SIZE * 3);
+    const { sightings } = await fetchSightings(query, speciesByKey, undefined, PAGE_SIZE);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(sightings).toHaveLength(PAGE_SIZE);
+  });
+
   it("fails rather than showing a partial map when a later page errors", async () => {
     vi.stubGlobal(
       "fetch",

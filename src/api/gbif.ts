@@ -189,13 +189,14 @@ export async function fetchSightings(
   query: SightingQuery,
   speciesByKey: ReadonlyMap<number, SpeciesSummary>,
   signal?: AbortSignal,
+  limit = MAX_SIGHTINGS,
 ): Promise<SightingResults> {
   const scope = sightingScope(speciesByKey.values(), query);
   if (scope.speciesKeys.length === 0 && scope.subspeciesKeys.length === 0) return { sightings: [], total: 0 };
 
   const firstPage = await searchOccurrences(sightingSearch(query, scope, 0), signal);
   const remainingOffsets: number[] = [];
-  for (let offset = PAGE_SIZE; offset < Math.min(firstPage.count, MAX_SIGHTINGS); offset += PAGE_SIZE) {
+  for (let offset = PAGE_SIZE; offset < Math.min(firstPage.count, limit); offset += PAGE_SIZE) {
     remainingOffsets.push(offset);
   }
   const remainingPages = await Promise.all(

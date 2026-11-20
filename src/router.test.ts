@@ -10,6 +10,10 @@ describe("parseRoute", () => {
     expect(parseRoute("#/map")).toEqual({ view: "map" });
   });
 
+  it("parses the quiz", () => {
+    expect(parseRoute("#/quiz")).toEqual({ view: "quiz" });
+  });
+
   it("reads the full map state", () => {
     expect(parseRoute("#/map?species=5219416&from=2026-10-01&to=2026-10-31&status=CR,VU&country=NP&sighting=4321")).toEqual({
       view: "map",
@@ -74,6 +78,7 @@ describe("routes", () => {
     expect(parseRoute(routes.map())).toEqual({ view: "map" });
     expect(parseRoute(routes.map({ speciesKey: 5219416 }))).toEqual({ view: "map", speciesKey: 5219416 });
     expect(parseRoute(routes.home())).toEqual({ view: "home" });
+    expect(parseRoute(routes.quiz())).toEqual({ view: "quiz" });
     expect(parseRoute(routes.organizations())).toEqual({ view: "organizations" });
     expect(parseRoute(routes.contents())).toEqual({ view: "contents" });
     expect(parseRoute(routes.chapter("Primates"))).toEqual({ view: "chapter", order: "Primates" });

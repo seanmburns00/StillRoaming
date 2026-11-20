@@ -2,5 +2,7 @@ node_modules/
 dist/
 .vscode/
 public/species-index.json
+public/daily-quiz.json
+public/quiz-history.json
 test-results/
 playwright-report/
