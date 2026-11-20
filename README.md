@@ -6,6 +6,8 @@ An interactive site for exploring recent sightings of endangered mammals and lea
 - **Field Guide**: a book-style catalog of the same species that appear on the map. The table of contents has one chapter per mammal order, and a search box that matches species and subspecies names. Each species gets a two-page spread with a photo, a range map, a Wikipedia summary, its sighting count, and links to its subspecies and to its sightings on the map.
 - **Subspecies pages**: the same layout for each sighted subspecies (Bengal tiger, Cross River gorilla, …). They show the species' status, plus the subspecies' own IUCN assessment when Wikidata has one, which is often more severe (the Sumatran tiger is Critically Endangered; the tiger as a species is Endangered).
 
+The site follows the system's light or dark setting until the visitor picks one with the theme button, which it then remembers.
+
 ## Data sources
 
 | Source | Used for |

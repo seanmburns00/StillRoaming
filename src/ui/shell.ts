@@ -1,5 +1,6 @@
 import { routes, type Route } from "../router";
 import { el } from "./dom";
+import { themeToggle } from "./theme";
 
 export interface Shell {
   outlet: HTMLElement;
@@ -17,6 +18,7 @@ export function renderShell(root: HTMLElement): Shell {
       { className: "masthead" },
       el("div", { className: "masthead__title" }, el("h1", {}, "Still Roaming"), el("p", {}, "Endangered Mammal Occurrence Tracker")),
       el("nav", { className: "tabs" }, mapLink, bookLink),
+      themeToggle(),
     ),
     outlet,
     el(

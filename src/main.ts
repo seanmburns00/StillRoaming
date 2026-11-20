@@ -3,12 +3,14 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "./styles/main.css";
 import { parseRoute, type Route } from "./router";
 import { renderShell } from "./ui/shell";
+import { restoreTheme } from "./ui/theme";
 import { mountChapterView } from "./views/book/chapterView";
 import { mountContentsView } from "./views/book/contentsView";
 import { mountSpeciesPage } from "./views/book/speciesPage";
 import { mountSubspeciesPage } from "./views/book/subspeciesPage";
 import { mountMapView } from "./views/map/mapView";
 
+restoreTheme();
 const shell = renderShell(document.querySelector<HTMLElement>("#app")!);
 let unmountCurrentView = () => {};
 

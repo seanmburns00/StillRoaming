@@ -40,6 +40,7 @@ export function mountMapView(outlet: HTMLElement, filter: TaxonFilter): () => vo
   }).setView([15, 20], 2);
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 18,
+    className: "base-tiles",
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }).addTo(map);
   const markers = L.markerClusterGroup({ chunkedLoading: true, showCoverageOnHover: false }).addTo(map);
