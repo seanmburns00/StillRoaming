@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { DEFAULT_LOOKBACK_DAYS, MAX_SIGHTINGS } from "../../config";
-import { defaultQuery, describeResults, validateQuery } from "./query";
+import { defaultQuery, describeResults, toMapState, validateQuery } from "./query";
 
 describe("defaultQuery", () => {
   it("looks back over the default window from today, using local dates", () => {
@@ -18,6 +18,19 @@ describe("defaultQuery", () => {
 
   it("includes every tracked status when showing a single subspecies", () => {
     expect(defaultQuery(new Date(2025, 0, 1), { subspeciesKey: 7059276 })).toMatchObject({ categories: ["CR", "EN", "VU"], subspeciesKey: 7059276 });
+  });
+
+  it("restores the dates and statuses from the map state", () => {
+    expect(
+      defaultQuery(new Date(2025, 0, 1), { speciesKey: 2435099, from: "2024-06-01", to: "2024-06-30", statuses: ["VU"] }),
+    ).toEqual({ from: "2024-06-01", to: "2024-06-30", categories: ["VU"], speciesKey: 2435099, subspeciesKey: undefined });
+  });
+
+  it("round-trips through the map state", () => {
+    const query = defaultQuery(new Date(2025, 0, 1), { subspeciesKey: 7059276 });
+    const state = toMapState(query, 42);
+    expect(state.sightingId).toBe(42);
+    expect(defaultQuery(new Date(2030, 0, 1), state)).toEqual(query);
   });
 
   it("includes every tracked status when showing a single species, so Vulnerable species still appear", () => {

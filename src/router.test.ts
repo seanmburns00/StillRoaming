@@ -6,6 +6,27 @@ describe("parseRoute", () => {
     expect(parseRoute(hash)).toEqual({ view: "map" });
   });
 
+  it("reads the full map state", () => {
+    expect(parseRoute("#/map?species=5219416&from=2026-10-01&to=2026-10-31&status=CR,VU&sighting=4321")).toEqual({
+      view: "map",
+      speciesKey: 5219416,
+      from: "2026-10-01",
+      to: "2026-10-31",
+      statuses: ["CR", "VU"],
+      sightingId: 4321,
+    });
+  });
+
+  it.each([
+    ["from=yesterday", {}],
+    ["to=2026-1-5", {}],
+    ["status=XX", {}],
+    ["status=CR,XX", { statuses: ["CR"] }],
+    ["sighting=abc", {}],
+  ])("ignores invalid map state %j", (search, expected) => {
+    expect(parseRoute(`#/map?${search}`)).toEqual({ view: "map", ...expected });
+  });
+
   it("reads a species filter on the map", () => {
     expect(parseRoute("#/map?species=5219416")).toEqual({ view: "map", speciesKey: 5219416 });
   });
@@ -44,11 +65,20 @@ describe("parseRoute", () => {
 describe("routes", () => {
   it("round-trips every route", () => {
     expect(parseRoute(routes.map())).toEqual({ view: "map" });
-    expect(parseRoute(routes.map(5219416))).toEqual({ view: "map", speciesKey: 5219416 });
+    expect(parseRoute(routes.map({ speciesKey: 5219416 }))).toEqual({ view: "map", speciesKey: 5219416 });
     expect(parseRoute(routes.contents())).toEqual({ view: "contents" });
     expect(parseRoute(routes.chapter("Primates"))).toEqual({ view: "chapter", order: "Primates" });
     expect(parseRoute(routes.species(5219416))).toEqual({ view: "species", speciesKey: 5219416 });
     expect(parseRoute(routes.subspecies(7059276))).toEqual({ view: "subspecies", subspeciesKey: 7059276 });
-    expect(parseRoute(routes.subspeciesMap(7059276))).toEqual({ view: "map", subspeciesKey: 7059276 });
+    expect(parseRoute(routes.map({ subspeciesKey: 7059276 }))).toEqual({ view: "map", subspeciesKey: 7059276 });
+  });
+
+  it("round-trips the full map state", () => {
+    const state = { subspeciesKey: 7059276, from: "2026-01-01", to: "2026-02-01", statuses: ["EN" as const], sightingId: 99 };
+    expect(parseRoute(routes.map(state))).toEqual({ view: "map", ...state });
+  });
+
+  it("leaves out empty map state", () => {
+    expect(routes.map({ statuses: [] })).toBe("#/map");
   });
 });

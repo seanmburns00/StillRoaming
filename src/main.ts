@@ -17,7 +17,7 @@ let unmountCurrentView = () => {};
 function mount(route: Route): () => void {
   switch (route.view) {
     case "map":
-      return mountMapView(shell.outlet, { speciesKey: route.speciesKey, subspeciesKey: route.subspeciesKey });
+      return mountMapView(shell.outlet, route);
     case "contents":
       return mountContentsView(shell.outlet);
     case "chapter":
