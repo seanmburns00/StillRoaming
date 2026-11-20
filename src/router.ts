@@ -19,6 +19,8 @@ export type Route =
   | { view: "subspecies"; subspeciesKey: number }
   | { view: "organizations" };
 
+export type ShareablePage = "species" | "subspecies";
+
 export const routes = {
   home: () => "#/",
   map: (state: MapState = {}) => {
@@ -38,6 +40,7 @@ export const routes = {
   species: (speciesKey: number) => `#/species/${speciesKey}`,
   subspecies: (subspeciesKey: number) => `#/subspecies/${subspeciesKey}`,
   organizations: () => "#/organizations",
+  sharePage: (page: ShareablePage, gbifKey: number) => `${page}/${gbifKey}/`,
 };
 
 export function parseRoute(hash: string): Route {

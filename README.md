@@ -7,6 +7,7 @@ An interactive site for exploring recent sightings of endangered mammals and lea
 - **Field Guide**: a book-style catalog of the same species that appear on the map. The table of contents has one chapter per mammal order, and a search box that matches species and subspecies names. Each species gets a two-page spread with a photo, a range map, a Wikipedia summary, its sighting count, a chart of photographed sightings per year over the last 20 years, a link to the conservation organizations page, and links to its subspecies and to its sightings on the map.
 - **Subspecies pages**: the same layout for each sighted subspecies (Bengal tiger, Cross River gorilla, …). They show the species' status, plus the subspecies' own IUCN assessment when Wikidata has one, which is often more severe (the Sumatran tiger is Critically Endangered; the tiger as a species is Endangered).
 - **Conservation organizations**: every organization the site links to, with what each one focuses on. The list is kept by hand in `CONSERVATION_ORGS` (`src/config.ts`).
+- **Share pages**: `species/<GBIF key>/` and `subspecies/<GBIF key>/` are static pages with Open Graph tags, so a shared link previews with the animal's name, status and photo, then forwards to the page in the app. The **Copy share link** button on each page copies one.
 
 The site follows the system's light or dark setting until the visitor picks one with the theme button, which it then remembers.
 
@@ -50,7 +51,7 @@ npm install
 npm run data       # build public/species-index.json (needed before dev; rerun to refresh)
 npm run dev        # local dev server
 npm test           # unit tests (Vitest)
-npm run build      # type-check and build to dist/
+npm run build      # type-check, build to dist/, and write the share pages (needs public/species-index.json)
 npm run preview    # serve the built site at http://localhost:4173/StillRoaming/
 ```
 
@@ -71,7 +72,7 @@ src/
   config.ts     Mammal orders, domestic animals to exclude, conservation organizations, countries, limits
   router.ts     Hash routes: #/ (home), #/map (?species=, subspecies=, from=, to=, status=, country=, sighting=),
                 #/book, #/book/<order>, #/species/<GBIF key>, #/subspecies/<GBIF key>, #/organizations
-scripts/        build-species-index.ts, run by `npm run data`
+scripts/        build-species-index.ts, run by `npm run data`; build-share-pages.ts, run by `npm run build`
 ```
 
 ## Deployment

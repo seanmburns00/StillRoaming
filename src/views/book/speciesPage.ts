@@ -8,7 +8,7 @@ import { el } from "../../ui/dom";
 import { sightingsLabel } from "../../ui/labels";
 import { statusBadge } from "../../ui/statusBadge";
 import { sightingTrend } from "../../ui/trendChart";
-import { backLink, description, mountBookPage, notFound, picturePage, referenceLinks, supportLink } from "./bookPage";
+import { backLink, description, mountBookPage, notFound, picturePage, referenceLinks, shareButton, supportLink } from "./bookPage";
 
 export function mountSpeciesPage(outlet: HTMLElement, speciesKey: number): () => void {
   return mountBookPage(outlet, (signal) => loadPage(speciesKey, signal));
@@ -51,6 +51,7 @@ function storyPage(species: SpeciesSummary, detail: TaxonDetail | null, story: s
     sightingTrend(speciesScope(species), signal),
     supportLink(),
     referenceLinks(routes.map({ speciesKey: species.gbifKey }), detail, species.gbifKey),
+    shareButton("species", species.gbifKey),
   );
 }
 

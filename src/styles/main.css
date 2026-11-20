@@ -919,7 +919,7 @@ a:hover {
   text-align: left;
 }
 
-/* Support */
+/* Support and share */
 
 .support-link {
   margin: 1.25rem 0 0;
@@ -979,6 +979,10 @@ a:hover {
 .org .button {
   align-self: flex-start;
   margin-top: auto;
+}
+
+.share-button {
+  margin-top: 0.5rem;
 }
 
 /* Home */
