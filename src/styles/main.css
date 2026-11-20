@@ -295,6 +295,12 @@ a:hover {
   filter: invert(1) hue-rotate(180deg) sepia(0.35) brightness(0.85);
 }
 
+.map .leaflet-control-layers {
+  font-family: var(--ui-font);
+  color: var(--ink);
+  background: var(--page);
+}
+
 .sighting-marker {
   fill-opacity: 0.9;
   stroke: #fff;

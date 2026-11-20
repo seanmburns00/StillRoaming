@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { MAX_SIGHTINGS } from "../config";
 import type { SpeciesSummary } from "../models/species";
 import {
+  densityTilesUrl,
   fetchSightings,
   PAGE_SIZE,
   sightingScope,
@@ -142,6 +143,14 @@ describe("sightingSearch", () => {
         { type: "equals", key: "EVENT_DATE", value: "2025-01-01,2025-03-31" },
       ]),
     });
+  });
+});
+
+describe("densityTilesUrl", () => {
+  it("asks GBIF for density tiles of one taxon, keeping Leaflet's placeholders", () => {
+    const url = densityTilesUrl(5219416);
+    expect(url).toContain("/v2/map/occurrence/density/{z}/{x}/{y}@1x.png?");
+    expect(url).toContain("taxonKey=5219416");
   });
 });
 
