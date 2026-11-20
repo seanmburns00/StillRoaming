@@ -8,6 +8,7 @@ import { mountChapterView } from "./views/book/chapterView";
 import { mountContentsView } from "./views/book/contentsView";
 import { mountSpeciesPage } from "./views/book/speciesPage";
 import { mountSubspeciesPage } from "./views/book/subspeciesPage";
+import { mountHomeView } from "./views/home/homeView";
 import { mountMapView } from "./views/map/mapView";
 import { mountOrganizationsView } from "./views/organizations/organizationsView";
 
@@ -17,6 +18,8 @@ let unmountCurrentView = () => {};
 
 function mount(route: Route): () => void {
   switch (route.view) {
+    case "home":
+      return mountHomeView(shell.outlet);
     case "map":
       return mountMapView(shell.outlet, route);
     case "organizations":

@@ -8,6 +8,7 @@ export interface Shell {
 }
 
 export function renderShell(root: HTMLElement): Shell {
+  const homeLink = el("a", { href: routes.home(), className: "tab" }, "Today");
   const mapLink = el("a", { href: routes.map(), className: "tab" }, "Field Map");
   const bookLink = el("a", { href: routes.contents(), className: "tab" }, "Field Guide");
   const outlet = el("main", { className: "outlet" });
@@ -17,7 +18,7 @@ export function renderShell(root: HTMLElement): Shell {
       "header",
       { className: "masthead" },
       el("div", { className: "masthead__title" }, el("h1", {}, "Still Roaming"), el("p", {}, "Endangered Mammal Occurrence Tracker")),
-      el("nav", { className: "tabs" }, mapLink, bookLink),
+      el("nav", { className: "tabs" }, homeLink, mapLink, bookLink),
       themeToggle(),
     ),
     outlet,
@@ -40,6 +41,7 @@ export function renderShell(root: HTMLElement): Shell {
   return {
     outlet,
     setActive(route) {
+      homeLink.classList.toggle("tab--active", route.view === "home");
       mapLink.classList.toggle("tab--active", route.view === "map");
       bookLink.classList.toggle("tab--active", ["contents", "chapter", "species", "subspecies"].includes(route.view));
     },

@@ -2,8 +2,12 @@ import { describe, expect, it } from "vitest";
 import { parseRoute, routes } from "./router";
 
 describe("parseRoute", () => {
-  it.each(["", "#", "#/", "#/map", "#/unknown"])("defaults %j to the map", (hash) => {
-    expect(parseRoute(hash)).toEqual({ view: "map" });
+  it.each(["", "#", "#/", "#/unknown"])("defaults %j to the home page", (hash) => {
+    expect(parseRoute(hash)).toEqual({ view: "home" });
+  });
+
+  it("parses the map without filters", () => {
+    expect(parseRoute("#/map")).toEqual({ view: "map" });
   });
 
   it("reads the full map state", () => {
@@ -69,6 +73,7 @@ describe("routes", () => {
   it("round-trips every route", () => {
     expect(parseRoute(routes.map())).toEqual({ view: "map" });
     expect(parseRoute(routes.map({ speciesKey: 5219416 }))).toEqual({ view: "map", speciesKey: 5219416 });
+    expect(parseRoute(routes.home())).toEqual({ view: "home" });
     expect(parseRoute(routes.organizations())).toEqual({ view: "organizations" });
     expect(parseRoute(routes.contents())).toEqual({ view: "contents" });
     expect(parseRoute(routes.chapter("Primates"))).toEqual({ view: "chapter", order: "Primates" });
