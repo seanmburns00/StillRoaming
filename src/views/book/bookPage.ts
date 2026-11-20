@@ -1,6 +1,6 @@
 import { fetchWikipediaExtract } from "../../api/wikipedia";
 import type { TaxonDetail } from "../../models/species";
-import { routes } from "../../router";
+import { routes, type ShareablePage } from "../../router";
 import { el } from "../../ui/dom";
 
 export function mountBookPage(outlet: HTMLElement, load: (signal: AbortSignal) => Promise<HTMLElement[]>): () => void {
@@ -59,6 +59,18 @@ export function picturePage(plate: { name: string; imageUrl?: string; caption: s
 
 export function supportLink(): HTMLElement {
   return el("p", { className: "support-link" }, el("a", { href: routes.organizations() }, "Support conservation organizations"));
+}
+
+export function shareButton(page: ShareablePage, gbifKey: number): HTMLButtonElement {
+  const url = new URL(routes.sharePage(page, gbifKey), window.location.href).href;
+  const button = el("button", { type: "button", className: "button share-button" }, "Copy share link");
+  button.addEventListener("click", () => {
+    navigator.clipboard.writeText(url).then(
+      () => (button.textContent = "Link copied"),
+      () => (button.textContent = url),
+    );
+  });
+  return button;
 }
 
 export function referenceLinks(mapHref: string, detail: TaxonDetail | null, gbifKey: number): HTMLUListElement {

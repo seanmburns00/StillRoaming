@@ -90,4 +90,8 @@ describe("routes", () => {
   it("leaves out empty map state", () => {
     expect(routes.map({ statuses: [], country: undefined })).toBe("#/map");
   });
+
+  it("builds share page paths relative to the site root", () => {
+    expect(routes.sharePage("species", 5219416)).toBe("species/5219416/");
+  });
 });

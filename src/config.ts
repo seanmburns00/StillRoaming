@@ -28,6 +28,8 @@ export const DOMESTICATED_SPECIES_KEYS: readonly number[] = [
 
 export type MammalOrderName = (typeof MAMMAL_ORDERS)[number]["name"];
 
+export const SITE_URL = "https://seanmburns00.github.io/StillRoaming/";
+
 export interface ConservationOrg {
   name: string;
   focus: string;

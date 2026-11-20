@@ -6,7 +6,7 @@ import { el } from "../../ui/dom";
 import { sightingsLabel } from "../../ui/labels";
 import { statusBadge } from "../../ui/statusBadge";
 import { sightingTrend } from "../../ui/trendChart";
-import { backLink, description, mountBookPage, notFound, picturePage, referenceLinks, supportLink } from "./bookPage";
+import { backLink, description, mountBookPage, notFound, picturePage, referenceLinks, shareButton, supportLink } from "./bookPage";
 
 export function mountSubspeciesPage(outlet: HTMLElement, subspeciesKey: number): () => void {
   return mountBookPage(outlet, (signal) => loadPage(subspeciesKey, signal));
@@ -64,5 +64,6 @@ function storyPage(
     sightingTrend({ speciesKeys: [], subspeciesKeys: [subspecies.gbifKey] }, signal),
     supportLink(),
     referenceLinks(routes.map({ subspeciesKey: subspecies.gbifKey }), detail, subspecies.gbifKey),
+    shareButton("subspecies", subspecies.gbifKey),
   );
 }
