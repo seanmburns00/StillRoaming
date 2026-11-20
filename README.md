@@ -2,7 +2,7 @@
 
 An interactive site for exploring recent sightings of endangered mammals and learning about the species still fighting for their place on the planet.
 
-- **Field Map**: photographed sightings of Critically Endangered, Endangered and Vulnerable mammals, filtered by date range (the last 30 days by default) and status, and clustered on a 2D map. Clicking a sighting opens a panel with the photo, the species and subspecies, where and when it was seen, and who recorded it. The filters and the selected sighting are kept in the URL, so any view can be shared. Sticky notes on the map link to conservation organizations' donation pages.
+- **Field Map**: photographed sightings of Critically Endangered, Endangered and Vulnerable mammals, filtered by date range (the last 30 days by default) and status, and clustered on a 2D map. Clicking a sighting opens a panel with the photo, the species and subspecies, where and when it was seen, and who recorded it. The filters and the selected sighting are kept in the URL, so any view can be shared. When the map is showing one species or subspecies, a layer of GBIF's all-time records sits under the recent sightings, for comparing where it has been recorded with where it is being seen now. Sticky notes on the map link to conservation organizations' donation pages.
 - **Field Guide**: a book-style catalog of the same species that appear on the map. The table of contents has one chapter per mammal order, and a search box that matches species and subspecies names. Each species gets a two-page spread with a photo, a range map, a Wikipedia summary, its sighting count, and links to its subspecies and to its sightings on the map.
 - **Subspecies pages**: the same layout for each sighted subspecies (Bengal tiger, Cross River gorilla, …). They show the species' status, plus the subspecies' own IUCN assessment when Wikidata has one, which is often more severe (the Sumatran tiger is Critically Endangered; the tiger as a species is Endangered).
 
@@ -29,6 +29,7 @@ Building the species list takes about 40 requests, more than GBIF allows a singl
 | Once per visit | The browser downloads `species-index.json` (about 150 KB), shared by every view | 1 |
 | Every map search | The sightings for the chosen dates, statuses and species or subspecies | 1–5 to GBIF |
 | Opening a species or subspecies page | Description, large photo, range map and assessment | 1 to Wikidata, 1 to Wikipedia |
+| Showing one species on the map | All-time occurrence density tiles | GBIF map tiles, as the map pans and zooms |
 
 Guide counts and the species list can be up to a day old; map sightings are always current. Building the list:
 

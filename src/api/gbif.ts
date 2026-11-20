@@ -132,6 +132,10 @@ export function sightingSearch(query: SightingQuery, scope: SightingScope, offse
   };
 }
 
+export function densityTilesUrl(taxonKey: number): string {
+  return `https://api.gbif.org/v2/map/occurrence/density/{z}/{x}/{y}@1x.png?taxonKey=${taxonKey}&bin=hex&hexPerTile=40&style=classic-noborder.poly`;
+}
+
 export async function fetchSightings(
   query: SightingQuery,
   speciesByKey: ReadonlyMap<number, SpeciesSummary>,

@@ -1,6 +1,6 @@
 import L from "leaflet";
 import "leaflet.markercluster";
-import { fetchSightings, type SightingQuery } from "../../api/gbif";
+import { densityTilesUrl, fetchSightings, type SightingQuery } from "../../api/gbif";
 import { fetchSpeciesIndex, findSubspecies } from "../../api/speciesIndex";
 import type { Sighting } from "../../models/sighting";
 import type { SpeciesSummary } from "../../models/species";
@@ -51,6 +51,15 @@ export function mountMapView(outlet: HTMLElement, state: MapState): () => void {
     className: "base-tiles",
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }).addTo(map);
+
+  const focusKey = state.subspeciesKey ?? state.speciesKey;
+  if (focusKey !== undefined) {
+    const allTimeRecords = L.tileLayer(densityTilesUrl(focusKey), {
+      opacity: 0.6,
+      attribution: 'Occurrence density &copy; <a href="https://www.gbif.org">GBIF</a>',
+    }).addTo(map);
+    L.control.layers(undefined, { "All GBIF records, all time": allTimeRecords }, { collapsed: false, position: "bottomright" }).addTo(map);
+  }
 
   const markers = L.markerClusterGroup({ chunkedLoading: true, showCoverageOnHover: false }).addTo(map);
   let controller: AbortController | undefined;
