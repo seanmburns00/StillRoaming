@@ -11,6 +11,7 @@ export interface MapState {
 }
 
 export type Route =
+  | { view: "home" }
   | ({ view: "map" } & MapState)
   | { view: "contents" }
   | { view: "chapter"; order: string }
@@ -19,6 +20,7 @@ export type Route =
   | { view: "organizations" };
 
 export const routes = {
+  home: () => "#/",
   map: (state: MapState = {}) => {
     const params = [
       ["species", state.speciesKey],
@@ -42,6 +44,7 @@ export function parseRoute(hash: string): Route {
   const [path = "", search = ""] = hash.replace(/^#\/?/, "").split("?");
   const [section, value] = path.split("/");
 
+  if (section === "map") return { view: "map", ...parseMapState(new URLSearchParams(search)) };
   if (section === "organizations") return { view: "organizations" };
   if (section === "book") {
     const order = value && safeDecode(value);
@@ -55,7 +58,7 @@ export function parseRoute(hash: string): Route {
     const subspeciesKey = gbifKey(value);
     return subspeciesKey ? { view: "subspecies", subspeciesKey } : { view: "contents" };
   }
-  return { view: "map", ...parseMapState(new URLSearchParams(search)) };
+  return { view: "home" };
 }
 
 function parseMapState(params: URLSearchParams): MapState {
