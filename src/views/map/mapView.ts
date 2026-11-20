@@ -2,9 +2,11 @@ import L from "leaflet";
 import "leaflet.markercluster";
 import { densityTilesUrl, fetchSightings, type SightingQuery } from "../../api/gbif";
 import { fetchSpeciesIndex, findSubspecies } from "../../api/speciesIndex";
+import { CONSERVATION_ORGS } from "../../config";
 import type { Sighting } from "../../models/sighting";
 import type { SpeciesSummary } from "../../models/species";
 import { routes, type MapState } from "../../router";
+import { shuffle } from "../../shuffle";
 import { el } from "../../ui/dom";
 import { filterPanel } from "./filterPanel";
 import { defaultQuery, describeResults, toMapState, validateQuery } from "./query";
@@ -15,6 +17,7 @@ const WEB_MERCATOR_MAX_LATITUDE = 85.0511;
 const MARKER_RADIUS = 7;
 const SELECTED_MARKER_RADIUS = 11;
 const COUNTRY_MAX_ZOOM = 7;
+const MAP_NOTES = 3;
 
 interface PlottedSighting {
   sighting: Sighting;
@@ -37,7 +40,7 @@ export function mountMapView(outlet: HTMLElement, state: MapState): () => void {
       { className: "map-view" },
       filterPanel(query, submit, (message) => (status.textContent = message), speciesName),
       status,
-      el("div", { className: "map-frame" }, mapElement, sightingPanel, stickyNotes()),
+      el("div", { className: "map-frame" }, mapElement, sightingPanel, stickyNotes(shuffle(CONSERVATION_ORGS).slice(0, MAP_NOTES))),
     ),
   );
 

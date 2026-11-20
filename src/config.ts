@@ -28,28 +28,87 @@ export const DOMESTICATED_SPECIES_KEYS: readonly number[] = [
 
 export type MammalOrderName = (typeof MAMMAL_ORDERS)[number]["name"];
 
-export const CONSERVATION_ORGS = [
+export interface ConservationOrg {
+  name: string;
+  focus: string;
+  blurb: string;
+  url: string;
+}
+
+export const CONSERVATION_ORGS: readonly ConservationOrg[] = [
   {
     name: "WWF",
+    focus: "Wildlife worldwide",
     blurb: "Protects tigers, elephants, rhinos and the habitats they depend on in nearly 100 countries.",
-    donateUrl: "https://www.worldwildlife.org/donate",
-  },
-  {
-    name: "Panthera",
-    blurb: "The only organization devoted exclusively to the world's 40 wild cat species.",
-    donateUrl: "https://panthera.org/donate",
-  },
-  {
-    name: "International Rhino Foundation",
-    blurb: "Funds anti-poaching patrols and habitat work for all five rhino species.",
-    donateUrl: "https://rhinos.org/donate/",
+    url: "https://www.worldwildlife.org/donate",
   },
   {
     name: "Wildlife Conservation Society",
+    focus: "Wildlife worldwide",
     blurb: "Runs field programs and parks protecting great apes, big cats and more across 60 countries.",
-    donateUrl: "https://www.wcs.org/support",
+    url: "https://www.wcs.org/support",
   },
-] as const;
+  {
+    name: "Fauna & Flora",
+    focus: "Wildlife worldwide",
+    blurb: "The world's oldest international conservation charity, founded in 1903, working through local partners.",
+    url: "https://www.fauna-flora.org/donate/",
+  },
+  {
+    name: "Conservation International",
+    focus: "Habitats worldwide",
+    blurb: "Uses science, policy and partnerships with local communities to protect the places wildlife depends on.",
+    url: "https://www.conservation.org/",
+  },
+  {
+    name: "African Wildlife Foundation",
+    focus: "African wildlife",
+    blurb: "Works with communities across Africa to protect its wildlife and wild lands.",
+    url: "https://www.awf.org/donate",
+  },
+  {
+    name: "Panthera",
+    focus: "Wild cats",
+    blurb: "The only organization devoted exclusively to the world's 40 wild cat species.",
+    url: "https://panthera.org/donate",
+  },
+  {
+    name: "Snow Leopard Trust",
+    focus: "Snow leopards",
+    blurb: "Works with the communities that share the snow leopard's mountains to protect the cat and its habitat.",
+    url: "https://snowleopard.org/donate/",
+  },
+  {
+    name: "International Rhino Foundation",
+    focus: "Rhinos",
+    blurb: "Funds anti-poaching patrols and habitat work for all five rhino species.",
+    url: "https://rhinos.org/donate/",
+  },
+  {
+    name: "Save the Elephants",
+    focus: "African elephants",
+    blurb: "Tracks and protects African elephants, from GPS-collared herds to fighting the ivory trade.",
+    url: "https://savetheelephants.org/donate/",
+  },
+  {
+    name: "Jane Goodall Institute",
+    focus: "Great apes",
+    blurb: "Founded by Jane Goodall to protect chimpanzees, other great apes and their forest homes.",
+    url: "https://janegoodall.org/",
+  },
+  {
+    name: "Save Pangolins",
+    focus: "Pangolins",
+    blurb: "Funds research, rescue and anti-trafficking work for the world's most trafficked mammal.",
+    url: "https://www.savepangolins.org/",
+  },
+  {
+    name: "Australian Wildlife Conservancy",
+    focus: "Australian mammals",
+    blurb: "Runs sanctuaries that protect Australia's threatened marsupials and other native mammals.",
+    url: "https://www.australianwildlife.org/donate/",
+  },
+];
 
 export const COUNTRY_CODES = (
   "AD AE AF AG AI AL AM AO AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BW BY BZ " +

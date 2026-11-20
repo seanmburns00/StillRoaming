@@ -31,6 +31,8 @@ export function renderShell(root: HTMLElement): Shell {
       " and ",
       el("a", { href: "https://en.wikipedia.org", target: "_blank", rel: "noopener" }, "Wikipedia"),
       " · ",
+      el("a", { href: routes.organizations() }, "Conservation organizations"),
+      " · ",
       el("a", { href: "https://github.com/seanmburns00/StillRoaming", target: "_blank", rel: "noopener" }, "Source on GitHub"),
     ),
   );
@@ -39,7 +41,7 @@ export function renderShell(root: HTMLElement): Shell {
     outlet,
     setActive(route) {
       mapLink.classList.toggle("tab--active", route.view === "map");
-      bookLink.classList.toggle("tab--active", route.view !== "map");
+      bookLink.classList.toggle("tab--active", ["contents", "chapter", "species", "subspecies"].includes(route.view));
     },
   };
 }
