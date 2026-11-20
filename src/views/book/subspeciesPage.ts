@@ -5,6 +5,7 @@ import { routes } from "../../router";
 import { el } from "../../ui/dom";
 import { sightingsLabel } from "../../ui/labels";
 import { statusBadge } from "../../ui/statusBadge";
+import { sightingTrend } from "../../ui/trendChart";
 import { backLink, description, mountBookPage, notFound, picturePage, referenceLinks } from "./bookPage";
 
 export function mountSubspeciesPage(outlet: HTMLElement, subspeciesKey: number): () => void {
@@ -31,7 +32,7 @@ async function loadPage(subspeciesKey: number, signal: AbortSignal): Promise<HTM
         caption: detail?.imageUrl ? name : `${species.commonName} (photo of the species)`,
         rangeMapUrl: detail?.rangeMapUrl,
       }),
-      storyPage(species, subspecies, detail, story),
+      storyPage(species, subspecies, detail, story, signal),
     ),
   ];
 }
@@ -41,6 +42,7 @@ function storyPage(
   subspecies: SubspeciesSummary,
   detail: TaxonDetail | null,
   story: string | undefined,
+  signal: AbortSignal,
 ): HTMLElement {
   return el(
     "div",
@@ -59,6 +61,7 @@ function storyPage(
       ),
     el("p", { className: "sighting-total" }, `${sightingsLabel(subspecies.sightings)} photographed in the wild on GBIF`),
     el("p", { className: "story" }, story ?? "No description available yet."),
+    sightingTrend({ speciesKeys: [], subspeciesKeys: [subspecies.gbifKey] }, signal),
     referenceLinks(routes.map({ subspeciesKey: subspecies.gbifKey }), detail, subspecies.gbifKey),
   );
 }
