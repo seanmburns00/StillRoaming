@@ -26,6 +26,11 @@ export interface SightingQuery extends TaxonFilter {
   near?: Nearby;
 }
 
+export interface YearCount {
+  year: number;
+  count: number;
+}
+
 export interface SightingScope {
   speciesKeys: number[];
   subspeciesKeys: number[];
@@ -126,6 +131,10 @@ export function sightingScope(species: Iterable<SpeciesSummary>, query: Sighting
   };
 }
 
+export function speciesScope(species: SpeciesSummary): SightingScope {
+  return { speciesKeys: [species.gbifKey], subspeciesKeys: species.subspecies.map((entry) => entry.gbifKey) };
+}
+
 export function sightingSearch(query: SightingQuery, scope: SightingScope, offset: number): OccurrenceSearch {
   return {
     limit: PAGE_SIZE,
@@ -149,6 +158,27 @@ export function placeFilters({ country, near }: Pick<SightingQuery, "country" | 
     filters.push({ type: "geoDistance", latitude: String(near.lat), longitude: String(near.lng), distance: `${near.km}km` });
   }
   return filters;
+}
+
+export const TREND_YEARS = 20;
+
+export async function fetchSightingsByYear(scope: SightingScope, lastYear: number, signal?: AbortSignal): Promise<YearCount[]> {
+  const firstYear = lastYear - TREND_YEARS + 1;
+  const page = await searchOccurrences(
+    {
+      limit: 0,
+      facets: ["YEAR"],
+      facetLimit: TREND_YEARS,
+      predicate: {
+        type: "and",
+        predicates: [...SIGHTING_FILTERS, { type: "equals", key: "YEAR", value: `${firstYear},${lastYear}` }, trackedSightings(scope)],
+      },
+    },
+    signal,
+  );
+  const counts = page.facets.find((facet) => facet.field === "YEAR")?.counts ?? [];
+  const byYear = new Map(counts.map(({ name, count }) => [Number(name), count]));
+  return Array.from({ length: TREND_YEARS }, (_, i) => ({ year: firstYear + i, count: byYear.get(firstYear + i) ?? 0 }));
 }
 
 export function densityTilesUrl(taxonKey: number): string {

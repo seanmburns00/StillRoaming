@@ -1,3 +1,4 @@
+import { speciesScope } from "../../api/gbif";
 import { fetchSpeciesIndex } from "../../api/speciesIndex";
 import { fetchTaxonDetail } from "../../api/wikidata";
 import { MAMMAL_ORDERS } from "../../config";
@@ -6,6 +7,7 @@ import { routes } from "../../router";
 import { el } from "../../ui/dom";
 import { sightingsLabel } from "../../ui/labels";
 import { statusBadge } from "../../ui/statusBadge";
+import { sightingTrend } from "../../ui/trendChart";
 import { backLink, description, mountBookPage, notFound, picturePage, referenceLinks } from "./bookPage";
 
 export function mountSpeciesPage(outlet: HTMLElement, speciesKey: number): () => void {
@@ -31,12 +33,12 @@ async function loadPage(speciesKey: number, signal: AbortSignal): Promise<HTMLEl
         caption: species.commonName,
         rangeMapUrl: detail?.rangeMapUrl,
       }),
-      storyPage(species, detail, story),
+      storyPage(species, detail, story, signal),
     ),
   ];
 }
 
-function storyPage(species: SpeciesSummary, detail: TaxonDetail | null, story: string | undefined): HTMLElement {
+function storyPage(species: SpeciesSummary, detail: TaxonDetail | null, story: string | undefined, signal: AbortSignal): HTMLElement {
   return el(
     "div",
     { className: "page page--right" },
@@ -46,6 +48,7 @@ function storyPage(species: SpeciesSummary, detail: TaxonDetail | null, story: s
     el("p", { className: "sighting-total" }, `${sightingsLabel(species.sightings)} photographed in the wild on GBIF`),
     el("p", { className: "story" }, story ?? "No description available yet."),
     species.subspecies.length > 0 && subspeciesList(species),
+    sightingTrend(speciesScope(species), signal),
     referenceLinks(routes.map({ speciesKey: species.gbifKey }), detail, species.gbifKey),
   );
 }

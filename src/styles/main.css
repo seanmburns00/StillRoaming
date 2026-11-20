@@ -851,3 +851,70 @@ a:hover {
 .theme-toggle:hover {
   background: rgb(0 0 0 / 0.35);
 }
+
+/* Trend chart */
+
+.trend {
+  margin: 1rem 0;
+  font-family: var(--ui-font);
+  font-size: 0.85rem;
+}
+
+.trend__chart {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  margin: 0.25rem 0;
+  overflow: visible;
+}
+
+.trend__bar {
+  fill: var(--accent);
+}
+
+.trend__hit {
+  fill: transparent;
+}
+
+.trend__year:hover .trend__bar {
+  fill: var(--rust);
+}
+
+.trend__axis {
+  stroke: var(--ink-soft);
+  stroke-width: 1;
+}
+
+.trend__tick {
+  font-size: 10px;
+  fill: var(--ink-soft);
+}
+
+.trend__peak {
+  font-size: 10px;
+  fill: var(--ink);
+}
+
+.trend__note {
+  margin: 0;
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+.trend__table summary {
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.trend__table table {
+  margin-top: 0.25rem;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.trend__table th,
+.trend__table td {
+  padding: 0.1rem 0.75rem 0.1rem 0;
+  text-align: left;
+}

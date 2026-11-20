@@ -4,8 +4,10 @@ import type { SpeciesSummary } from "../models/species";
 import {
   densityTilesUrl,
   fetchSightings,
+  fetchSightingsByYear,
   PAGE_SIZE,
   placeFilters,
+  TREND_YEARS,
   sightingScope,
   sightingSearch,
   toDisplaySize,
@@ -175,6 +177,31 @@ describe("densityTilesUrl", () => {
     const url = densityTilesUrl(5219416);
     expect(url).toContain("/v2/map/occurrence/density/{z}/{x}/{y}@1x.png?");
     expect(url).toContain("taxonKey=5219416");
+  });
+});
+
+describe("fetchSightingsByYear", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("returns every year in the window in order, with zero for years GBIF leaves out", async () => {
+    const fetchMock = vi.fn(async () =>
+      new Response(JSON.stringify({ count: 7, results: [], facets: [{ field: "YEAR", counts: [{ name: "2026", count: 5 }, { name: "2010", count: 2 }] }] })),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const years = await fetchSightingsByYear({ speciesKeys: [5219416], subspeciesKeys: [] }, 2026);
+
+    expect(years).toHaveLength(TREND_YEARS);
+    expect(years[0]).toEqual({ year: 2026 - TREND_YEARS + 1, count: 0 });
+    expect(years.at(-1)).toEqual({ year: 2026, count: 5 });
+    expect(years.find((entry) => entry.year === 2010)).toEqual({ year: 2010, count: 2 });
+    const search = JSON.parse(String((fetchMock.mock.calls[0] as unknown as [string, RequestInit])[1].body)) as OccurrenceSearch;
+    expect(search).toMatchObject({ limit: 0, facets: ["YEAR"], facetLimit: TREND_YEARS });
+    expect(search.predicate).toMatchObject({
+      predicates: expect.arrayContaining([{ type: "equals", key: "YEAR", value: `${2026 - TREND_YEARS + 1},2026` }]),
+    });
   });
 });
 
