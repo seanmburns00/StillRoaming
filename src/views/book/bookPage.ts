@@ -57,6 +57,10 @@ export function picturePage(plate: { name: string; imageUrl?: string; caption: s
   );
 }
 
+export function supportLink(): HTMLElement {
+  return el("p", { className: "support-link" }, el("a", { href: routes.organizations() }, "Support conservation organizations"));
+}
+
 export function referenceLinks(mapHref: string, detail: TaxonDetail | null, gbifKey: number): HTMLUListElement {
   const external = (href: string, label: string) => el("li", {}, el("a", { href, target: "_blank", rel: "noopener" }, label));
   return el(

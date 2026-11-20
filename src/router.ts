@@ -15,7 +15,8 @@ export type Route =
   | { view: "contents" }
   | { view: "chapter"; order: string }
   | { view: "species"; speciesKey: number }
-  | { view: "subspecies"; subspeciesKey: number };
+  | { view: "subspecies"; subspeciesKey: number }
+  | { view: "organizations" };
 
 export const routes = {
   map: (state: MapState = {}) => {
@@ -34,12 +35,14 @@ export const routes = {
   chapter: (order: string) => `#/book/${encodeURIComponent(order)}`,
   species: (speciesKey: number) => `#/species/${speciesKey}`,
   subspecies: (subspeciesKey: number) => `#/subspecies/${subspeciesKey}`,
+  organizations: () => "#/organizations",
 };
 
 export function parseRoute(hash: string): Route {
   const [path = "", search = ""] = hash.replace(/^#\/?/, "").split("?");
   const [section, value] = path.split("/");
 
+  if (section === "organizations") return { view: "organizations" };
   if (section === "book") {
     const order = value && safeDecode(value);
     return order ? { view: "chapter", order } : { view: "contents" };

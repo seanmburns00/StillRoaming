@@ -9,6 +9,7 @@ import { mountContentsView } from "./views/book/contentsView";
 import { mountSpeciesPage } from "./views/book/speciesPage";
 import { mountSubspeciesPage } from "./views/book/subspeciesPage";
 import { mountMapView } from "./views/map/mapView";
+import { mountOrganizationsView } from "./views/organizations/organizationsView";
 
 restoreTheme();
 const shell = renderShell(document.querySelector<HTMLElement>("#app")!);
@@ -18,6 +19,8 @@ function mount(route: Route): () => void {
   switch (route.view) {
     case "map":
       return mountMapView(shell.outlet, route);
+    case "organizations":
+      return mountOrganizationsView(shell.outlet);
     case "contents":
       return mountContentsView(shell.outlet);
     case "chapter":

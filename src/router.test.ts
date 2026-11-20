@@ -69,6 +69,7 @@ describe("routes", () => {
   it("round-trips every route", () => {
     expect(parseRoute(routes.map())).toEqual({ view: "map" });
     expect(parseRoute(routes.map({ speciesKey: 5219416 }))).toEqual({ view: "map", speciesKey: 5219416 });
+    expect(parseRoute(routes.organizations())).toEqual({ view: "organizations" });
     expect(parseRoute(routes.contents())).toEqual({ view: "contents" });
     expect(parseRoute(routes.chapter("Primates"))).toEqual({ view: "chapter", order: "Primates" });
     expect(parseRoute(routes.species(5219416))).toEqual({ view: "species", speciesKey: 5219416 });
