@@ -7,12 +7,13 @@ describe("parseRoute", () => {
   });
 
   it("reads the full map state", () => {
-    expect(parseRoute("#/map?species=5219416&from=2026-10-01&to=2026-10-31&status=CR,VU&sighting=4321")).toEqual({
+    expect(parseRoute("#/map?species=5219416&from=2026-10-01&to=2026-10-31&status=CR,VU&country=NP&sighting=4321")).toEqual({
       view: "map",
       speciesKey: 5219416,
       from: "2026-10-01",
       to: "2026-10-31",
       statuses: ["CR", "VU"],
+      country: "NP",
       sightingId: 4321,
     });
   });
@@ -22,6 +23,8 @@ describe("parseRoute", () => {
     ["to=2026-1-5", {}],
     ["status=XX", {}],
     ["status=CR,XX", { statuses: ["CR"] }],
+    ["country=nepal", {}],
+    ["country=np", {}],
     ["sighting=abc", {}],
   ])("ignores invalid map state %j", (search, expected) => {
     expect(parseRoute(`#/map?${search}`)).toEqual({ view: "map", ...expected });
@@ -74,11 +77,11 @@ describe("routes", () => {
   });
 
   it("round-trips the full map state", () => {
-    const state = { subspeciesKey: 7059276, from: "2026-01-01", to: "2026-02-01", statuses: ["EN" as const], sightingId: 99 };
+    const state = { subspeciesKey: 7059276, from: "2026-01-01", to: "2026-02-01", statuses: ["EN" as const], country: "IN", sightingId: 99 };
     expect(parseRoute(routes.map(state))).toEqual({ view: "map", ...state });
   });
 
   it("leaves out empty map state", () => {
-    expect(routes.map({ statuses: [] })).toBe("#/map");
+    expect(routes.map({ statuses: [], country: undefined })).toBe("#/map");
   });
 });

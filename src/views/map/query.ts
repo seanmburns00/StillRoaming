@@ -14,6 +14,7 @@ export function defaultQuery(today: Date, state: MapState = {}): SightingQuery {
     categories: state.statuses ?? (focused ? ALL_IUCN_CATEGORIES : ["CR", "EN"]),
     speciesKey: state.speciesKey,
     subspeciesKey: state.subspeciesKey,
+    country: state.country,
   };
 }
 
@@ -24,6 +25,7 @@ export function toMapState(query: SightingQuery, sightingId?: number): MapState 
     from: query.from,
     to: query.to,
     statuses: query.categories,
+    country: query.country,
     sightingId,
   };
 }

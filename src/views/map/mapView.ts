@@ -14,6 +14,7 @@ import { stickyNotes } from "./stickyNotes";
 const WEB_MERCATOR_MAX_LATITUDE = 85.0511;
 const MARKER_RADIUS = 7;
 const SELECTED_MARKER_RADIUS = 11;
+const COUNTRY_MAX_ZOOM = 7;
 
 interface PlottedSighting {
   sighting: Sighting;
@@ -34,7 +35,7 @@ export function mountMapView(outlet: HTMLElement, state: MapState): () => void {
     el(
       "section",
       { className: "map-view" },
-      filterPanel(query, submit, speciesName),
+      filterPanel(query, submit, (message) => (status.textContent = message), speciesName),
       status,
       el("div", { className: "map-frame" }, mapElement, sightingPanel, stickyNotes()),
     ),
@@ -62,6 +63,7 @@ export function mountMapView(outlet: HTMLElement, state: MapState): () => void {
   }
 
   const markers = L.markerClusterGroup({ chunkedLoading: true, showCoverageOnHover: false }).addTo(map);
+  let nearbyArea: L.Circle | undefined;
   let controller: AbortController | undefined;
   let selected: PlottedSighting | undefined;
 
@@ -119,6 +121,8 @@ export function mountMapView(outlet: HTMLElement, state: MapState): () => void {
     clearSelection(false);
     markers.clearLayers();
     plotted = [];
+    nearbyArea?.remove();
+    nearbyArea = undefined;
 
     const problem = validateQuery(query);
     if (problem) {
@@ -137,11 +141,21 @@ export function mountMapView(outlet: HTMLElement, state: MapState): () => void {
       plotted = sightings.map(plot);
       markers.addLayers(plotted.map((entry) => entry.marker));
       status.textContent = describeResults(sightings.length, total);
+      frameResults();
       openSharedSighting();
     } catch (error) {
       if (signal.aborted) return;
       console.error(error);
       status.textContent = "Couldn't load sightings just now. Please try again in a moment.";
+    }
+  }
+
+  function frameResults() {
+    if (query.near) {
+      nearbyArea = L.circle([query.near.lat, query.near.lng], { radius: query.near.km * 1000, className: "nearby-area" }).addTo(map);
+      map.fitBounds(nearbyArea.getBounds());
+    } else if (query.country && plotted.length > 0) {
+      map.fitBounds(markers.getBounds(), { maxZoom: COUNTRY_MAX_ZOOM });
     }
   }
 

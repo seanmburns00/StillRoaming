@@ -6,6 +6,7 @@ export interface MapState {
   from?: string;
   to?: string;
   statuses?: IucnCategory[];
+  country?: string;
   sightingId?: number;
 }
 
@@ -24,6 +25,7 @@ export const routes = {
       ["from", state.from],
       ["to", state.to],
       ["status", state.statuses?.join(",")],
+      ["country", state.country],
       ["sighting", state.sightingId],
     ].filter(([, value]) => value !== undefined && value !== "");
     return params.length ? `#/map?${params.map(([key, value]) => `${key}=${value}`).join("&")}` : "#/map";
@@ -55,12 +57,14 @@ export function parseRoute(hash: string): Route {
 
 function parseMapState(params: URLSearchParams): MapState {
   const statuses = params.get("status")?.split(",").filter(isIucnCategory);
+  const country = params.get("country");
   return {
     speciesKey: gbifKey(params.get("species")),
     subspeciesKey: gbifKey(params.get("subspecies")),
     from: isoDate(params.get("from")),
     to: isoDate(params.get("to")),
     statuses: statuses?.length ? statuses : undefined,
+    country: country && /^[A-Z]{2}$/.test(country) ? country : undefined,
     sightingId: gbifKey(params.get("sighting")),
   };
 }

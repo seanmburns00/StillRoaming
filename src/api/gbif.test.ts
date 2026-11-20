@@ -5,6 +5,7 @@ import {
   densityTilesUrl,
   fetchSightings,
   PAGE_SIZE,
+  placeFilters,
   sightingScope,
   sightingSearch,
   toDisplaySize,
@@ -143,6 +144,29 @@ describe("sightingSearch", () => {
         { type: "equals", key: "EVENT_DATE", value: "2025-01-01,2025-03-31" },
       ]),
     });
+  });
+
+  it("adds the place filters", () => {
+    const search = sightingSearch({ ...query, country: "IN" }, { speciesKeys: [1], subspeciesKeys: [] }, 0);
+    expect(search.predicate).toMatchObject({
+      predicates: expect.arrayContaining([{ type: "equals", key: "COUNTRY", value: "IN" }]),
+    });
+  });
+});
+
+describe("placeFilters", () => {
+  it("filters nothing by default", () => {
+    expect(placeFilters({})).toEqual([]);
+  });
+
+  it("filters by country", () => {
+    expect(placeFilters({ country: "KE" })).toEqual([{ type: "equals", key: "COUNTRY", value: "KE" }]);
+  });
+
+  it("filters by distance from a point, including a latitude or longitude of zero", () => {
+    expect(placeFilters({ near: { lat: 0, lng: -1.25, km: 100 } })).toEqual([
+      { type: "geoDistance", latitude: "0", longitude: "-1.25", distance: "100km" },
+    ]);
   });
 });
 

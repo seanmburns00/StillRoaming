@@ -212,11 +212,16 @@ a:hover {
   border-radius: 6px;
 }
 
-.filters input[type="date"] {
+.filters input[type="date"],
+.filters select {
   font: inherit;
   padding: 0.2rem;
   border: 2px inset var(--paper-dark);
   background: var(--field);
+}
+
+.filters select {
+  max-width: 14rem;
 }
 
 .filters__statuses {
@@ -299,6 +304,13 @@ a:hover {
   font-family: var(--ui-font);
   color: var(--ink);
   background: var(--page);
+}
+
+.nearby-area {
+  fill: var(--olive);
+  fill-opacity: 0.08;
+  stroke: var(--olive-dark);
+  stroke-dasharray: 6 4;
 }
 
 .sighting-marker {
