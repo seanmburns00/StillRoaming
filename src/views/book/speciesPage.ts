@@ -46,7 +46,7 @@ function storyPage(species: SpeciesSummary, detail: TaxonDetail | null, story: s
     el("p", { className: "sighting-total" }, `${sightingsLabel(species.sightings)} photographed in the wild on GBIF`),
     el("p", { className: "story" }, story ?? "No description available yet."),
     species.subspecies.length > 0 && subspeciesList(species),
-    referenceLinks(routes.map(species.gbifKey), detail, species.gbifKey),
+    referenceLinks(routes.map({ speciesKey: species.gbifKey }), detail, species.gbifKey),
   );
 }
 
