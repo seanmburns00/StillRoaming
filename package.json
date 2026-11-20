@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "data": "tsx scripts/build-species-index.ts",
+    "data": "tsx scripts/build-species-index.ts && tsx scripts/build-daily-quiz.ts",
     "build": "tsc --noEmit && vite build && tsx scripts/build-share-pages.ts",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",

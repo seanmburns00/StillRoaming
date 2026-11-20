@@ -1,6 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import type { Page } from "@playwright/test";
-import { expect, snowLeopard, test, tiger } from "./fixtures";
+import { dailyQuiz, expect, snowLeopard, test, tiger } from "./fixtures";
 
 async function expectNoSeriousA11yIssues(page: Page) {
   const { violations } = await new AxeBuilder({ page }).exclude(".leaflet-container").analyze();
@@ -12,6 +12,7 @@ test("the home page features a species of the day with its yearly trend", async 
   await page.goto("./");
   await expect(page.getByText("Species of the day")).toBeVisible();
   await expect(page.locator(".trend__chart")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Take the daily quiz" })).toBeVisible();
   await expectNoSeriousA11yIssues(page);
 });
 
@@ -80,6 +81,36 @@ test("species pages chart sightings, point to supporters and can be shared", asy
   await expect(page.getByRole("link", { name: "Support conservation organizations" })).toHaveAttribute("href", "#/organizations");
   await expect(page.getByRole("button", { name: "Copy share link" })).toBeVisible();
   await expectNoSeriousA11yIssues(page);
+});
+
+test("the daily quiz scores names and map pins, and can only be played once a day", async ({ page }) => {
+  await page.goto("./#/quiz");
+  await expect(page.getByRole("heading", { name: "Who's that mammal? #7" })).toBeVisible();
+  for (let question = 1; question <= dailyQuiz.questions.length; question += 1) {
+    await expect(page.getByText(`Photo ${question} of ${dailyQuiz.questions.length}`)).toBeVisible();
+    await page.locator(".quiz__choice").first().click();
+    await expect(page.locator(".quiz__verdict")).toHaveText(/^(Correct!|Not quite\.) It's a /);
+
+    const lockIn = page.getByRole("button", { name: "Lock in guess" });
+    await expect(lockIn).toBeDisabled();
+    await page.locator(".quiz__map").click();
+    await lockIn.click();
+    await expect(page.locator(".quiz__distance")).toHaveText(/^[\d,]+ km away$/);
+    await expect(page.locator(".quiz__points")).toHaveText(/^Name \+(500|0) · Location \+[\d,]+ · \+[\d,]+ points$/);
+    await page.getByRole("button", { name: question === dailyQuiz.questions.length ? "See your score" : "Next mammal" }).click();
+  }
+
+  const finalScore = page.locator(".quiz__score");
+  await expect(finalScore).toHaveText(/^[\d,]+ \/ 3,000 points$/);
+  const nextQuiz = page.getByRole("region", { name: "Time until the next quiz" });
+  await expect(nextQuiz.getByRole("heading", { name: "Next quiz in" })).toBeVisible();
+  await expect(nextQuiz.locator(".countdown__value")).toHaveText([/^\d{2}$/, /^\d{2}$/, /^\d{2}$/]);
+  await expect(page.locator(".quiz__breakdown tbody tr")).toHaveCount(dailyQuiz.questions.length);
+  await expectNoSeriousA11yIssues(page);
+
+  const score = await finalScore.textContent();
+  await page.reload();
+  await expect(finalScore).toHaveText(score!);
 });
 
 test("share pages describe the species and send visitors to it", async ({ page, request }) => {

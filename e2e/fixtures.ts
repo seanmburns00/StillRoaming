@@ -1,4 +1,7 @@
 import { test as base, type Page } from "@playwright/test";
+import { quizDateAt } from "../src/data/dailyQuiz";
+import { sealQuiz } from "../src/data/publishedQuiz";
+import type { DailyQuiz } from "../src/models/dailyQuiz";
 import type { SpeciesIndex, SpeciesSummary } from "../src/models/species";
 
 const PIXEL = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=", "base64");
@@ -70,9 +73,27 @@ export const occurrences = [
   media: [{ type: "StillImage", identifier: `https://example.org/photos/${key}.jpg`, rightsHolder: "A. Ranger" }],
 }));
 
+export const dailyQuiz: DailyQuiz = {
+  date: quizDateAt(new Date()),
+  number: 7,
+  questions: occurrences.map((occurrence) => ({
+    occurrenceId: occurrence.key,
+    speciesKey: occurrence.speciesKey,
+    choices: speciesIndex.species.map((species) => species.gbifKey),
+    photo: { url: occurrence.media[0]!.identifier, credit: occurrence.recordedBy },
+    lat: occurrence.decimalLatitude,
+    lng: occurrence.decimalLongitude,
+    place: occurrence.country,
+    date: occurrence.eventDate,
+  })),
+};
+
+const publishedQuiz = await sealQuiz(dailyQuiz);
+
 async function mockApis(page: Page) {
   await page.route(/^https?:\/\/(?!localhost)/, (route) => route.abort());
   await page.route("**/species-index.json", (route) => route.fulfill({ json: speciesIndex }));
+  await page.route("**/daily-quiz.json", (route) => route.fulfill({ json: { quizzes: [publishedQuiz] } }));
   await page.route("https://api.gbif.org/v1/occurrence/search/predicate", (route) => {
     const search = route.request().postDataJSON() as { facets?: string[] };
     if (search.facets?.includes("YEAR")) {

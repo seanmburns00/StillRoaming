@@ -1010,3 +1010,229 @@ a:hover {
   text-transform: uppercase;
   color: var(--ink-soft);
 }
+
+/* Quiz */
+
+.quiz__question {
+  max-width: 560px;
+}
+
+.quiz__progress {
+  margin: 0.5rem 0;
+  font-family: var(--ui-font);
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.quiz__photo {
+  margin: 0 0 1rem;
+}
+
+.quiz__photo img {
+  display: block;
+  width: 100%;
+  max-height: 380px;
+  object-fit: contain;
+  background: var(--paper-dark);
+  border: 6px solid #fff;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.35);
+}
+
+.quiz__photo figcaption {
+  font-family: var(--ui-font);
+  font-size: 0.7rem;
+  color: var(--ink-soft);
+}
+
+.quiz__choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.5rem;
+}
+
+.quiz__choice {
+  padding: 0.6rem 0.75rem;
+  font: 1rem var(--body-font);
+  color: var(--ink);
+  text-align: left;
+  background: var(--card);
+  border: 2px solid var(--paper-dark);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.quiz__choice:hover:not(:disabled) {
+  border-color: var(--olive);
+}
+
+.quiz__choice:disabled {
+  cursor: default;
+}
+
+.quiz__choice--answer {
+  border-color: var(--olive);
+  box-shadow: inset 0 0 0 2px var(--olive);
+}
+
+.quiz__choice--answer::after {
+  content: " \2713";
+}
+
+.quiz__choice--wrong {
+  border-color: var(--cr);
+  text-decoration: line-through;
+}
+
+.quiz__choice--wrong::after {
+  content: " \2717";
+}
+
+.quiz__reveal {
+  margin-top: 1rem;
+  font-family: var(--ui-font);
+}
+
+.quiz__verdict {
+  font-size: 1.1rem;
+}
+
+.quiz__score {
+  font-size: 1.5rem;
+}
+
+.quiz__where {
+  margin-top: 1rem;
+}
+
+.quiz__where[hidden] {
+  display: none;
+}
+
+.quiz__where-prompt {
+  margin: 0 0 0.5rem;
+  font-family: var(--ui-font);
+  font-weight: bold;
+}
+
+.quiz__map {
+  height: 360px;
+  margin-bottom: 0.75rem;
+  border: 4px solid var(--ink-soft);
+  border-radius: 4px;
+  cursor: crosshair;
+}
+
+.quiz__map .base-tiles {
+  filter: sepia(0.45) saturate(0.85) brightness(1.02);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .quiz__map .base-tiles {
+    filter: invert(1) hue-rotate(180deg) sepia(0.35) brightness(0.85);
+  }
+}
+
+:root[data-theme="dark"] .quiz__map .base-tiles {
+  filter: invert(1) hue-rotate(180deg) sepia(0.35) brightness(0.85);
+}
+
+.quiz__pin {
+  fill: var(--rust);
+  fill-opacity: 0.9;
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+.quiz__actual {
+  fill: var(--olive);
+  fill-opacity: 0.95;
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+.quiz__line {
+  stroke: var(--ink);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+}
+
+.quiz__outcome {
+  font-family: var(--ui-font);
+}
+
+.quiz__distance {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.quiz__breakdown {
+  width: 100%;
+  max-width: 560px;
+  margin: 0.5rem 0 1rem;
+  border-collapse: collapse;
+  font-family: var(--ui-font);
+  font-variant-numeric: tabular-nums;
+}
+
+.quiz__breakdown th,
+.quiz__breakdown td {
+  padding: 0.35rem 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid var(--paper-dark);
+}
+
+.quiz__breakdown th:nth-child(n + 3),
+.quiz__breakdown td:nth-child(n + 3) {
+  text-align: right;
+}
+
+.quiz__points {
+  margin-top: 0;
+}
+
+.quiz__next h3 {
+  margin: 1.5rem 0 0.5rem;
+  font-family: var(--ui-font);
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.countdown {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.countdown__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 5rem;
+  padding: 0.6rem 0.75rem 0.5rem;
+  color: var(--on-olive);
+  background: linear-gradient(var(--olive) 50%, var(--olive-dark) 50%);
+  border-radius: 8px;
+  box-shadow: 0 3px 6px rgb(0 0 0 / 0.35), inset 0 -1px 0 rgb(0 0 0 / 0.25);
+}
+
+.countdown__value {
+  font: bold 2.25rem/1 var(--ui-font);
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown__label {
+  margin-top: 0.35rem;
+  font-family: var(--ui-font);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.quiz__next-note {
+  margin: 0.75rem 0 0;
+  font-family: var(--ui-font);
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
