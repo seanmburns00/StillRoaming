@@ -2,3 +2,5 @@ node_modules/
 dist/
 .vscode/
 public/species-index.json
+test-results/
+playwright-report/

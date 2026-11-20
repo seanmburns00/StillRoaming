@@ -52,8 +52,11 @@ npm run data       # build public/species-index.json (needed before dev; rerun t
 npm run dev        # local dev server
 npm test           # unit tests (Vitest)
 npm run build      # type-check, build to dist/, and write the share pages (needs public/species-index.json)
+npm run test:e2e   # browser tests (Playwright) against the built site, light and dark, with every API mocked
 npm run preview    # serve the built site at http://localhost:4173/StillRoaming/
 ```
+
+Before the first `npm run test:e2e`, install the browser with `npx playwright install chromium`. The browser tests also run an axe accessibility check on the home, species and organizations pages.
 
 `public/species-index.json` is generated, not committed. If `npm run data` fails with a certificate error on a network that inspects TLS traffic, run it with Node using the system certificate store: `NODE_OPTIONS=--use-system-ca npm run data` (PowerShell: `$env:NODE_OPTIONS="--use-system-ca"; npm run data`).
 
@@ -73,10 +76,11 @@ src/
   router.ts     Hash routes: #/ (home), #/map (?species=, subspecies=, from=, to=, status=, country=, sighting=),
                 #/book, #/book/<order>, #/species/<GBIF key>, #/subspecies/<GBIF key>, #/organizations
 scripts/        build-species-index.ts, run by `npm run data`; build-share-pages.ts, run by `npm run build`
+e2e/            Playwright tests and their mocked API responses
 ```
 
 ## Deployment
 
-`.github/workflows/deploy.yml` runs on every push to `main`, once a day, and on demand from the repository's **Actions** tab (**Run workflow**). It tests, rebuilds the species list, builds, and publishes `dist/` to GitHub Pages. If GBIF or Wikidata is down, the run fails and the previous deployment stays live. In the repository settings, set **Pages → Source** to **GitHub Actions**.
+`.github/workflows/deploy.yml` runs on every push to `main`, once a day, and on demand from the repository's **Actions** tab (**Run workflow**). It runs the unit tests, rebuilds the species list, builds, runs the browser tests, and publishes `dist/` to GitHub Pages. If GBIF or Wikidata is down, the run fails and the previous deployment stays live. In the repository settings, set **Pages → Source** to **GitHub Actions**.
 
 Other branches are not deployed.
