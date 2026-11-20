@@ -12,10 +12,18 @@ export interface TaxonFilter {
   subspeciesKey?: number;
 }
 
+export interface Nearby {
+  lat: number;
+  lng: number;
+  km: number;
+}
+
 export interface SightingQuery extends TaxonFilter {
   from: string;
   to: string;
   categories: IucnCategory[];
+  country?: string;
+  near?: Nearby;
 }
 
 export interface SightingScope {
@@ -31,7 +39,8 @@ export interface SightingResults {
 export type Predicate =
   | { type: "equals"; key: string; value: string }
   | { type: "in"; key: string; values: string[] }
-  | { type: "and" | "or"; predicates: Predicate[] };
+  | { type: "and" | "or"; predicates: Predicate[] }
+  | { type: "geoDistance"; latitude: string; longitude: string; distance: string };
 
 export interface OccurrenceSearch {
   predicate: Predicate;
@@ -126,10 +135,20 @@ export function sightingSearch(query: SightingQuery, scope: SightingScope, offse
       predicates: [
         ...SIGHTING_FILTERS,
         { type: "equals", key: "EVENT_DATE", value: `${query.from},${query.to}` },
+        ...placeFilters(query),
         trackedSightings(scope),
       ],
     },
   };
+}
+
+export function placeFilters({ country, near }: Pick<SightingQuery, "country" | "near">): Predicate[] {
+  const filters: Predicate[] = [];
+  if (country) filters.push({ type: "equals", key: "COUNTRY", value: country });
+  if (near) {
+    filters.push({ type: "geoDistance", latitude: String(near.lat), longitude: String(near.lng), distance: `${near.km}km` });
+  }
+  return filters;
 }
 
 export function densityTilesUrl(taxonKey: number): string {

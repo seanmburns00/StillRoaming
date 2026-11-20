@@ -2,7 +2,7 @@
 
 An interactive site for exploring recent sightings of endangered mammals and learning about the species still fighting for their place on the planet.
 
-- **Field Map**: photographed sightings of Critically Endangered, Endangered and Vulnerable mammals, filtered by date range (the last 30 days by default) and status, and clustered on a 2D map. Clicking a sighting opens a panel with the photo, the species and subspecies, where and when it was seen, and who recorded it. The filters and the selected sighting are kept in the URL, so any view can be shared. When the map is showing one species or subspecies, a layer of GBIF's all-time records sits under the recent sightings, for comparing where it has been recorded with where it is being seen now. Sticky notes on the map link to conservation organizations' donation pages.
+- **Field Map**: photographed sightings of Critically Endangered, Endangered and Vulnerable mammals, filtered by date range (the last 30 days by default), status, and place (anywhere, a country, or within 100 or 500 km of the visitor), and clustered on a 2D map. Clicking a sighting opens a panel with the photo, the species and subspecies, where and when it was seen, and who recorded it. The filters and the selected sighting are kept in the URL, so any view can be shared; the visitor's location never is. When the map is showing one species or subspecies, a layer of GBIF's all-time records sits under the recent sightings, for comparing where it has been recorded with where it is being seen now. Sticky notes on the map link to conservation organizations' donation pages.
 - **Field Guide**: a book-style catalog of the same species that appear on the map. The table of contents has one chapter per mammal order, and a search box that matches species and subspecies names. Each species gets a two-page spread with a photo, a range map, a Wikipedia summary, its sighting count, and links to its subspecies and to its sightings on the map.
 - **Subspecies pages**: the same layout for each sighted subspecies (Bengal tiger, Cross River gorilla, …). They show the species' status, plus the subspecies' own IUCN assessment when Wikidata has one, which is often more severe (the Sumatran tiger is Critically Endangered; the tiger as a species is Endangered).
 
@@ -27,7 +27,7 @@ Building the species list takes about 40 requests, more than GBIF allows a singl
 | --- | --- | --- |
 | Once a day, and on every push to `main` | `npm run data` builds `public/species-index.json`: statuses, subspecies, sighting counts, names and thumbnails for every tracked species | About 40, 4 at a time, in 10–15 seconds |
 | Once per visit | The browser downloads `species-index.json` (about 150 KB), shared by every view | 1 |
-| Every map search | The sightings for the chosen dates, statuses and species or subspecies | 1–5 to GBIF |
+| Every map search | The sightings for the chosen dates, statuses, place and species or subspecies | 1–5 to GBIF |
 | Opening a species or subspecies page | Description, large photo, range map and assessment | 1 to Wikidata, 1 to Wikipedia |
 | Showing one species on the map | All-time occurrence density tiles | GBIF map tiles, as the map pans and zooms |
 
@@ -64,8 +64,8 @@ src/
   ui/           DOM helper, app shell, shared components
   views/map/    Field Map: filters, sighting panel, sticky notes
   views/book/   Field Guide: contents, chapters, species and subspecies pages
-  config.ts     Mammal orders, domestic animals to exclude, conservation organizations, limits
-  router.ts     Hash routes: #/map (?species=, subspecies=, from=, to=, status=, sighting=),
+  config.ts     Mammal orders, domestic animals to exclude, conservation organizations, countries, limits
+  router.ts     Hash routes: #/map (?species=, subspecies=, from=, to=, status=, country=, sighting=),
                 #/book, #/book/<order>, #/species/<GBIF key>, #/subspecies/<GBIF key>
 scripts/        build-species-index.ts, run by `npm run data`
 ```

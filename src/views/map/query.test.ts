@@ -20,15 +20,16 @@ describe("defaultQuery", () => {
     expect(defaultQuery(new Date(2025, 0, 1), { subspeciesKey: 7059276 })).toMatchObject({ categories: ["CR", "EN", "VU"], subspeciesKey: 7059276 });
   });
 
-  it("restores the dates and statuses from the map state", () => {
+  it("restores the dates, statuses and country from the map state", () => {
     expect(
-      defaultQuery(new Date(2025, 0, 1), { speciesKey: 2435099, from: "2024-06-01", to: "2024-06-30", statuses: ["VU"] }),
-    ).toEqual({ from: "2024-06-01", to: "2024-06-30", categories: ["VU"], speciesKey: 2435099, subspeciesKey: undefined });
+      defaultQuery(new Date(2025, 0, 1), { speciesKey: 2435099, from: "2024-06-01", to: "2024-06-30", statuses: ["VU"], country: "KE" }),
+    ).toEqual({ from: "2024-06-01", to: "2024-06-30", categories: ["VU"], speciesKey: 2435099, subspeciesKey: undefined, country: "KE" });
   });
 
-  it("round-trips through the map state", () => {
-    const query = defaultQuery(new Date(2025, 0, 1), { subspeciesKey: 7059276 });
-    const state = toMapState(query, 42);
+  it("round-trips through the map state, leaving out the visitor's location", () => {
+    const query = defaultQuery(new Date(2025, 0, 1), { subspeciesKey: 7059276, country: "IN" });
+    const state = toMapState({ ...query, near: { lat: 1, lng: 2, km: 100 } }, 42);
+    expect(state).not.toHaveProperty("near");
     expect(state.sightingId).toBe(42);
     expect(defaultQuery(new Date(2030, 0, 1), state)).toEqual(query);
   });
